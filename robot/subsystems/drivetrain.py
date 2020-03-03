@@ -267,9 +267,25 @@ class DriveTrain(Subsystem):
         for multiplier, controller in zip(multipliers, self.pid_controllers):
             controller.setReference(multiplier * velocity, rev.ControlType.kVelocity, 1)
 
-    def goToSetPoint(self, set_point, reset=True):
+    def goToSetPoint(self, set_point, reset=True): 
+        '''
+        goes FORWARD set_point inches
+        ''' 
+        
         self.reset()
         multipliers = [1.0, 1.0, -1.0, -1.0]
+        for multiplier, controller in zip(multipliers, self.pid_controllers):
+            # controller.setReference(multiplier * set_point, rev.ControlType.kPosition)
+            controller.setReference(multiplier * set_point, rev.ControlType.kSmartMotion, pidSlot=1) 
+    
+    def strafeToSetPoint(self, set_point, reset=True): 
+        '''
+        goes RIGHT set_point inches
+        ''' 
+        
+        self.reset()
+        multipliers = [1.0, -1.0, -1.0, 1.0] 
+        
         for multiplier, controller in zip(multipliers, self.pid_controllers):
             # controller.setReference(multiplier * set_point, rev.ControlType.kPosition)
             controller.setReference(multiplier * set_point, rev.ControlType.kSmartMotion, pidSlot=1)
